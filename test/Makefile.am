@@ -4,6 +4,7 @@ INCLUDES = -I$(top_srcdir)/pixman -I$(top_builddir)/pixman
 TESTPROGRAMS =			\
 	a1-trap-test		\
 	region-test		\
+	region-translate-test	\
 	fetch-test		\
 	oob-test		\
 	window-test		\
@@ -19,6 +20,7 @@ composite_LDADD = $(TEST_LDADD)
 trap_crasher_LDADD = $(TEST_LDADD)
 oob_test_LDADD = $(TEST_LDADD)
 window_test_LDADD = $(TEST_LDADD)
+region_translate_test_LDADD = $(TEST_LDADD)
 
 region_test_LDADD = $(TEST_LDADD)
 region_test_SOURCES = region-test.c utils.c utils.h
