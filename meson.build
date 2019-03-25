@@ -376,13 +376,15 @@ if get_option('gnuplot')
   config.set('PIXMAN_GNUPLOT', 1)
 endif
 
-use_openmp = get_option('openmp')
-dep_openmp = null_dep
-if not use_openmp.disabled()
-  dep_openmp = dependency('openmp', required : get_option('openmp'))
-  if dep_openmp.found()
-    config.set10('USE_OPENMP', true)
-  endif
+dep_openmp = dependency('openmp', required : get_option('openmp'))
+if dep_openmp.found()
+  config.set10('USE_OPENMP', true)
+elif meson.version().version_compare('<0.51.0')
+# In versions of meson before 0.51 the openmp dependency can still
+# inject arguments in the the auto case when it is not found, the
+# detection does work correctly in that case however, so we just
+# replace dep_openmp with null_dep to work around this.
+  dep_openmp = null_dep
 endif
 
 dep_gtk = dependency('gtk+-2.0', version : '>= 2.16', required : get_option('gtk'))
