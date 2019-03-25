@@ -39,7 +39,7 @@ simds = [
   ['arm-simd', have_armv6_simd, [],
    ['pixman-arm-simd-asm.S', 'pixman-arm-simd-asm-scaled.S']],
   ['arm-neon', have_neon, [],
-   ['pixman-arm-neon-asm.S', 'pixman-arm-neon-asm-scaled.S']],
+   ['pixman-arm-neon-asm.S', 'pixman-arm-neon-asm-bilinear.S']],
   ['mips-dspr2', have_mips_dspr2, mips_dspr2_flags,
    ['pixman-mips-dspr2-asm.S', 'pixman-mips-memcpy-asm.S']],
   ['loongson-mmi', have_loongson_mmi, loongson_mmi_flags, []]
