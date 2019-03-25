@@ -70,6 +70,7 @@ if not use_loongson_mmi.disabled()
         return 0;
       }''',
       args : loongson_mmi_flags,
+      include_directories : include_directories('.'),
       name : 'Loongson MMI Intrinsic Support')
     have_loongson_mmi = true
   endif
