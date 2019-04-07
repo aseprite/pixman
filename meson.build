@@ -290,7 +290,7 @@ endif
 if have_iwmmxt
   config.set10('USE_ARM_IWMMXT', true)
 elif use_iwmmxt.enabled()
-  error('NEON Support unavailable, but required')
+  error('IWMMXT Support unavailable, but required')
 endif
 
 use_mips_dspr2 = get_option('mips-dspr2')
