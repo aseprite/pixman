@@ -26,6 +26,8 @@ EXTRA_DIST =				\
 	Makefile.win32.common		\
 	meson.build			\
 	meson_options.txt		\
+	neon-test.S			\
+	arm-simd-test.S			\
 	$(NULL)
 
 tar_gz = $(PACKAGE)-$(VERSION).tar.gz
