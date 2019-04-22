@@ -78,6 +78,7 @@ static const named_int_t dithers[] =
 {
     { "None",                   PIXMAN_REPEAT_NONE },
     { "Bayer 8x8",              PIXMAN_DITHER_ORDERED_BAYER_8 },
+    { "Blue noise 64x64",       PIXMAN_DITHER_ORDERED_BLUE_NOISE_64 },
 };
 
 static int

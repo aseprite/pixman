@@ -1193,6 +1193,7 @@ static const dither_entry_t dither_list[] =
      */
 
     ENTRY (ORDERED_BAYER_8),
+    ENTRY (ORDERED_BLUE_NOISE_64),
     ENTRY (NONE),
 
 #undef ENTRY

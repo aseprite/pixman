@@ -292,6 +292,7 @@ typedef enum
     PIXMAN_DITHER_GOOD,
     PIXMAN_DITHER_BEST,
     PIXMAN_DITHER_ORDERED_BAYER_8,
+    PIXMAN_DITHER_ORDERED_BLUE_NOISE_64,
 } pixman_dither_t;
 
 typedef enum

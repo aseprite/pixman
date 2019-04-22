@@ -79,6 +79,7 @@ static const pixman_op_t operators[] =
 static const pixman_dither_t dithers[] =
 {
     PIXMAN_DITHER_ORDERED_BAYER_8,
+    PIXMAN_DITHER_ORDERED_BLUE_NOISE_64,
 };
 
 #define RANDOM_ELT(array)                                               \

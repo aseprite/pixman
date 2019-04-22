@@ -35,6 +35,7 @@
 #include "pixman-private.h"
 #include "pixman-combine32.h"
 #include "pixman-inlines.h"
+#include "dither/blue-noise-64x64.h"
 
 /* Fetch functions */
 
@@ -1049,6 +1050,13 @@ dest_write_back_narrow (pixman_iter_t *iter)
 }
 
 static const float
+dither_factor_blue_noise_64 (int x, int y)
+{
+    float m = dither_blue_noise_64x64[((y & 0x3f) << 6) | (x & 0x3f)];
+    return m * (1. / 4096.f) + (1. / 8192.f);
+}
+
+static const float
 dither_factor_bayer_8 (int x, int y)
 {
     uint32_t m;
@@ -1168,9 +1176,13 @@ dest_write_back_wide (pixman_iter_t *iter)
     case PIXMAN_DITHER_NONE:
 	break;
 
-    case PIXMAN_DITHER_FAST:
     case PIXMAN_DITHER_GOOD:
     case PIXMAN_DITHER_BEST:
+    case PIXMAN_DITHER_ORDERED_BLUE_NOISE_64:
+	buffer = dither_apply_ordered (iter, dither_factor_blue_noise_64);
+	break;
+
+    case PIXMAN_DITHER_FAST:
     case PIXMAN_DITHER_ORDERED_BAYER_8:
 	buffer = dither_apply_ordered (iter, dither_factor_bayer_8);
 	break;
