@@ -36,6 +36,7 @@ add_project_arguments(
     '-Wdeclaration-after-statement',
     '-fno-strict-aliasing',
     '-fvisibility=hidden',
+    '-Wundef',
   ]),
   language : ['c']
 )
@@ -444,6 +445,8 @@ endif
 if host_machine.endian() == 'big'
   config.set('WORDS_BIGENDIAN', 1)
 endif
+
+config.set('SIZEOF_LONG', cc.sizeof('long'))
 
 # Required to make pixman-private.h
 config.set('PACKAGE', 'foo')
