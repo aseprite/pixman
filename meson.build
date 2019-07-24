@@ -387,7 +387,24 @@ dep_gtk = dependency('gtk+-2.0', version : '>= 2.16', required : get_option('gtk
 dep_glib = dependency('glib-2.0', required : get_option('gtk'))
 dep_pixman = dependency('pixman-1', required : get_option('gtk'),
                         version : '>= ' + meson.project_version())
-dep_png = dependency('libpng', required : get_option('libpng'))
+
+dep_png = null_dep
+if not get_option('libpng').disabled()
+  dep_png = dependency('libpng', required : false)
+
+  # We need to look for the right library to link to for libpng,
+  # when looking for libpng manually
+  foreach png_ver : [ '16', '15', '14', '13', '12', '10' ]
+    if not dep_png.found()
+      dep_png = cc.find_library('libpng@0@'.format(png_ver), has_headers : ['png.h'], required : false)
+    endif
+  endforeach
+
+  if get_option('libpng').enabled() and not dep_png.found()
+    error('libpng support requested but libpng library not found')
+  endif
+endif
+
 if dep_png.found()
   config.set('HAVE_LIBPNG', 1)
 endif
