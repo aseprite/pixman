@@ -365,14 +365,21 @@ if get_option('gnuplot')
   config.set('PIXMAN_GNUPLOT', 1)
 endif
 
-dep_openmp = dependency('openmp', required : get_option('openmp'))
-if dep_openmp.found()
-  config.set10('USE_OPENMP', true)
-elif meson.version().version_compare('<0.51.0')
-# In versions of meson before 0.51 the openmp dependency can still
-# inject arguments in the the auto case when it is not found, the
-# detection does work correctly in that case however, so we just
-# replace dep_openmp with null_dep to work around this.
+if cc.get_id() != 'msvc'
+  dep_openmp = dependency('openmp', required : get_option('openmp'))
+  if dep_openmp.found()
+    config.set10('USE_OPENMP', true)
+  elif meson.version().version_compare('<0.51.0')
+  # In versions of meson before 0.51 the openmp dependency can still
+  # inject arguments in the the auto case when it is not found, the
+  # detection does work correctly in that case however, so we just
+  # replace dep_openmp with null_dep to work around this.
+    dep_openmp = null_dep
+  endif
+else
+  # the MSVC implementation of openmp is not compliant enough for our
+  # uses here, so we disable it here.
+  # Please see: https://stackoverflow.com/questions/12560243/using-threadprivate-directive-in-visual-studio
   dep_openmp = null_dep
 endif
 
