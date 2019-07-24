@@ -23,7 +23,7 @@ project(
   ['c'],
   version : '0.38.5',
   license : 'MIT',
-  meson_version : '>= 0.47.2',
+  meson_version : '>= 0.50.0',
   default_options : ['buildtype=debugoptimized'],
 )
 
@@ -393,7 +393,29 @@ if dep_png.found()
 endif
 dep_m = cc.find_library('m', required : false)
 dep_threads = dependency('threads')
-if dep_threads.found()
+
+# MSVC-style compilers do not come with pthreads, so we must link
+# to it explicitly, currently pthreads-win32 is supported
+pthreads_found = false
+
+if dep_threads.found() and cc.has_header('pthread.h')
+  if cc.get_argument_syntax() == 'msvc'
+    pthread_lib = null_dep
+    foreach pthread_type : ['VC3', 'VSE3', 'VCE3', 'VC2', 'VSE2', 'VCE2']
+      if not pthread_lib.found()
+        pthread_lib = cc.find_library('pthread@0@'.format(pthread_type), required : false)
+      endif
+    endforeach
+    if pthread_lib.found()
+      pthreads_found = true
+      dep_threads = pthread_lib
+    endif
+  else
+    pthreads_found = true
+  endif
+endif
+
+if pthreads_found
   config.set('HAVE_PTHREADS', 1)
 endif
 
