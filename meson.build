@@ -85,9 +85,12 @@ endif
 
 use_mmx = get_option('mmx')
 have_mmx = false
-mmx_flags = ['-mmmx', '-Winline']
+mmx_flags = []
+if cc.get_id() != 'msvc'
+  mmx_flags = ['-mmmx', '-Winline']
+endif
 if not use_mmx.disabled()
-  if host_machine.cpu_family() == 'x86_64'
+  if host_machine.cpu_family() == 'x86_64' or cc.get_id() == 'msvc'
     have_mmx = true
   elif host_machine.cpu_family() == 'x86' and cc.compiles('''
       #include <mmintrin.h>
@@ -128,14 +131,21 @@ if not use_mmx.disabled()
 endif
 
 if have_mmx
-  config.set10('USE_X86_MMX', true)
+  # Inline assembly do not work on X64 MSVC, so we use
+  # compatibility intrinsics there
+  if cc.get_id() != 'msvc' or host_machine.cpu_family() != 'x86_64'
+    config.set10('USE_X86_MMX', true)
+  endif
 elif use_mmx.enabled()
   error('MMX Support unavailable, but required')
 endif
 
 use_sse2 = get_option('sse2')
 have_sse2 = false
-sse2_flags = ['-msse2', '-Winline']
+sse2_flags = []
+if cc.get_id() != 'msvc'
+  sse2_flags = ['-msse2', '-Winline']
+endif
 if not use_sse2.disabled()
   if host_machine.cpu_family() == 'x86'
     if cc.compiles('''
@@ -170,8 +180,13 @@ endif
 
 use_ssse3 = get_option('ssse3')
 have_ssse3 = false
-ssse3_flags =['-mssse3', '-Winline']
-if not use_ssse3.disabled()
+ssse3_flags = []
+if cc.get_id() != 'msvc'
+  ssse3_flags = ['-mssse3', '-Winline']
+endif
+
+# x64 pre-2010 MSVC compilers crashes when building the ssse3 code
+if not use_ssse3.disabled() and not (cc.get_id() == 'msvc' and cc.version().version_compare('<16') and host_machine.cpu_family() == 'x86_64')
   if host_machine.cpu_family().startswith('x86')
     if cc.compiles('''
         #include <mmintrin.h>
