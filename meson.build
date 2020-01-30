@@ -86,7 +86,12 @@ endif
 use_mmx = get_option('mmx')
 have_mmx = false
 mmx_flags = []
-if cc.get_id() != 'msvc'
+
+if cc.get_id() == 'msvc'
+  mmx_flags = ['/w14710', '/w14714', '/wd4244']
+elif cc.get_id() == 'sun'
+  mmx_flags = ['-xarch=sse']
+else
   mmx_flags = ['-mmmx', '-Winline']
 endif
 if not use_mmx.disabled()
@@ -143,7 +148,9 @@ endif
 use_sse2 = get_option('sse2')
 have_sse2 = false
 sse2_flags = []
-if cc.get_id() != 'msvc'
+if cc.get_id() == 'sun'
+  sse2_flags = ['-xarch=sse2']
+elif cc.get_id() != 'msvc'
   sse2_flags = ['-msse2', '-Winline']
 endif
 if not use_sse2.disabled()
