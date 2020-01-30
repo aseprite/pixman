@@ -443,7 +443,7 @@ if pthreads_found
   config.set('HAVE_PTHREADS', 1)
 endif
 
-funcs = ['sigaction', 'alarm', 'mprotect', 'getpagesize', 'mmap']
+funcs = ['sigaction', 'alarm', 'mprotect', 'getpagesize', 'mmap', 'getisax', 'gettimeofday']
 # mingw claimes to have posix_memalign, but it doesn't
 if host_machine.system() != 'windows'
   funcs += 'posix_memalign'
@@ -454,10 +454,6 @@ foreach f : funcs
     config.set('HAVE_@0@'.format(f.to_upper()), 1)
   endif
 endforeach
-
-if cc.has_function('gettimeofday')
-  config.set('HAVE_GETTIMEOFDAY', 1)
-endif
 
 # This is only used in one test, that defines _GNU_SOURCE
 if cc.has_function('feenableexcept',
