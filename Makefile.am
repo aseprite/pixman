@@ -33,31 +33,31 @@ EXTRA_DIST =				\
 tar_gz = $(PACKAGE)-$(VERSION).tar.gz
 tar_xz = $(PACKAGE)-$(VERSION).tar.xz
 
-sha1_tgz = $(tar_gz).sha1
-md5_tgz = $(tar_gz).md5
+sha512_tgz = $(tar_gz).sha512
+sha256_tgz = $(tar_gz).sha256
 
-sha1_txz = $(tar_xz).sha1
-md5_txz = $(tar_xz).md5
+sha512_txz = $(tar_xz).sha512
+sha256_txz = $(tar_xz).sha256
 
-gpg_file = $(sha1_tgz).asc
+gpg_file = $(sha512_tgz).asc
 
-$(sha1_tgz): $(tar_gz)
-	sha1sum $^ > $@
+$(sha512_tgz): $(tar_gz)
+	sha512sum $^ > $@
 
-$(md5_tgz): $(tar_gz)
-	md5sum $^ > $@
+$(sha256_tgz): $(tar_gz)
+	sha256sum $^ > $@
 
-$(sha1_txz): $(tar_xz)
-	sha1sum $^ > $@
+$(sha512_txz): $(tar_xz)
+	sha512sum $^ > $@
 
-$(md5_txz): $(tar_xz)
-	md5sum $^ > $@
+$(sha256_txz): $(tar_xz)
+	sha256sum $^ > $@
 
-$(gpg_file): $(sha1_tgz)
+$(gpg_file): $(sha512_tgz)
 	@echo "Please enter your GPG password to sign the checksum."
 	gpg --armor --sign $^ 
 
-HASHFILES = $(sha1_tgz) $(sha1_txz) $(md5_tgz) $(md5_txz)
+HASHFILES = $(sha512_tgz) $(sha512_txz) $(sha256_tgz) $(sha256_txz)
 
 release-verify-newer:
 	@echo -n "Checking that no $(VERSION) release already exists at $(RELEASE_XORG_HOST)..."
@@ -91,8 +91,8 @@ release-check: ensure-prev release-verify-newer release-remove-old distcheck
 release-tag:
 	git tag -u $(GPGKEY) -m "$(PACKAGE) $(VERSION) release" $(PACKAGE)-$(VERSION)
 
-release-upload: release-check $(tar_gz) $(tar_xz) $(sha1_tgz) $(sha1_txz) $(md5_tgz) $(gpg_file)
-	scp $(tar_gz) $(sha1_tgz) $(gpg_file) $(RELEASE_CAIRO_HOST):$(RELEASE_CAIRO_DIR)
+release-upload: release-check $(tar_gz) $(tar_xz) $(sha512_tgz) $(sha512_txz) $(sha256_tgz) $(gpg_file)
+	scp $(tar_gz) $(sha512_tgz) $(gpg_file) $(RELEASE_CAIRO_HOST):$(RELEASE_CAIRO_DIR)
 	scp $(tar_gz) $(tar_xz) $(RELEASE_XORG_HOST):$(RELEASE_XORG_DIR)
 	ssh $(RELEASE_CAIRO_HOST) "rm -f $(RELEASE_CAIRO_DIR)/LATEST-$(PACKAGE)-[0-9]* && ln -s $(tar_gz) $(RELEASE_CAIRO_DIR)/LATEST-$(PACKAGE)-$(VERSION)"
 
@@ -115,14 +115,14 @@ release-publish-message: $(HASHFILES) ensure-prev
 	@echo "	$(RELEASE_XORG_URL)/$(tar_xz)"
 	@echo ""
 	@echo "Hashes:"
-	@echo -n "	MD5:  "
-	@cat $(md5_tgz)
-	@echo -n "	MD5:  "
-	@cat $(md5_txz)
-	@echo -n "	SHA1: "
-	@cat $(sha1_tgz)
-	@echo -n "	SHA1: "
-	@cat $(sha1_txz)
+	@echo -n "	SHA256: "
+	@cat $(sha256_tgz)
+	@echo -n "	SHA256: "
+	@cat $(sha256_txz)
+	@echo -n "	SHA512: "
+	@cat $(sha512_tgz)
+	@echo -n "	SHA512: "
+	@cat $(sha512_txz)
 	@echo ""
 	@echo "GPG signature:"
 	@echo "	$(RELEASE_CAIRO_URL)/$(gpg_file)"
