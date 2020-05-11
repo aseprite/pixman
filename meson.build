@@ -37,6 +37,12 @@ add_project_arguments(
     '-fno-strict-aliasing',
     '-fvisibility=hidden',
     '-Wundef',
+    # -ftrapping-math is the default for gcc, but -fno-trapping-math is the
+    # default for clang.  The FLOAT_IS_ZERO macro is used to guard against
+    # floating-point exceptions, however with -fno-trapping-math, the compiler
+    # can reorder floating-point operations so that they occur before the guard.
+    # Note, this function is ignored in clang < 10.0.0.
+    '-ftrapping-math'
   ]),
   language : ['c']
 )
