@@ -106,3 +106,8 @@ option(
   type : 'feature',
   description : 'Use libpng'
 )
+option(
+  'tests',
+  type : 'feature',
+  description : 'Build tests and demos'
+)

@@ -534,8 +534,11 @@ version_conf.set('PIXMAN_VERSION_MICRO', split[2])
 add_project_arguments('-DHAVE_CONFIG_H', language : ['c'])
 
 subdir('pixman')
-subdir('test')
-subdir('demos')
+
+if not get_option('tests').disabled()
+  subdir('test')
+  subdir('demos')
+endif
 
 pkg = import('pkgconfig')
 pkg.generate(
