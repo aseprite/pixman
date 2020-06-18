@@ -398,8 +398,6 @@ endif
 
 dep_gtk = dependency('gtk+-2.0', version : '>= 2.16', required : get_option('gtk'))
 dep_glib = dependency('glib-2.0', required : get_option('gtk'))
-dep_pixman = dependency('pixman-1', required : get_option('gtk'),
-                        version : '>= ' + meson.project_version())
 
 dep_png = null_dep
 if not get_option('libpng').disabled()
