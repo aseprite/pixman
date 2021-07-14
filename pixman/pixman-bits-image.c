@@ -1055,14 +1055,14 @@ dest_write_back_narrow (pixman_iter_t *iter)
     iter->y++;
 }
 
-static const float
+static float
 dither_factor_blue_noise_64 (int x, int y)
 {
     float m = dither_blue_noise_64x64[((y & 0x3f) << 6) | (x & 0x3f)];
     return m * (1. / 4096.f) + (1. / 8192.f);
 }
 
-static const float
+static float
 dither_factor_bayer_8 (int x, int y)
 {
     uint32_t m;
