@@ -412,7 +412,7 @@ else
   dep_openmp = null_dep
 endif
 
-dep_gtk = dependency('gtk+-2.0', version : '>= 2.16', required : get_option('gtk'))
+dep_gtk = dependency('gtk+-3.0', required : get_option('gtk'))
 dep_glib = dependency('glib-2.0', required : get_option('gtk'))
 
 dep_png = null_dep
