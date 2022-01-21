@@ -555,11 +555,10 @@ if not get_option('tests').disabled()
 endif
 
 pkg = import('pkgconfig')
-pkg.generate(
+pkg.generate(libpixman,
   name : 'Pixman',
   filebase : 'pixman-1',
   description : 'The pixman library (version 1)',
-  libraries : libpixman,
   subdirs: 'pixman-1',
   version : meson.project_version(),
 )
